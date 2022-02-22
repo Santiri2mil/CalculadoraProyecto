@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         CalVi?.text = ""
         operacion = NoOPE
-
+        //dibujar operacion
         bu1?.setOnClickListener{numPresionado(digito = "1")}
         bu2?.setOnClickListener{numPresionado(digito = "2")}
         bu3?.setOnClickListener{numPresionado(digito = "3")}
@@ -98,6 +98,7 @@ class MainActivity : AppCompatActivity() {
             else->0
         }
         CalVi?.text== if("$resultado".endsWith(".0")) { "$resultado".replace(".0","") } else { "%.2f".format(resultado) }
+        CalVi?.text== if("$resultado".endsWith("/0")) { "$resultado".replace(".0","ERROR") } else { "%.2f".format(resultado) }
     }
     private fun Borrar(){
         num1=0.0
