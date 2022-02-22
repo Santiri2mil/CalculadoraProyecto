@@ -10,10 +10,13 @@ import android.util.Log
 private val TAG="MainActivity"
 private val TEXT="TEXT_CONTENT"
 class MainActivity : AppCompatActivity() {
-    private var num1:Double=0.0
-    private var num2:Double=0.0
-    private var operacion:Int=0
+    var num1:Double=0.0
+    var num2:Double=0.0
+    var oper=0
+    var num:Double=0.0
+    var resultado:Double=0.0
     private var CalVi: TextView?=null
+    private var CalVi2: TextView?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,82 +40,77 @@ class MainActivity : AppCompatActivity() {
         val borrar:Button=findViewById<Button>(R.id.borrar)
         val igual:Button=findViewById<Button>(R.id.igual)
 
-        val CalVi:TextView=findViewById<TextView>(R.id.CalVi)
-
+        CalVi=findViewById<TextView>(R.id.CalVi)
+        CalVi2=findViewById<TextView>(R.id.CalVi2)
 
         CalVi?.text = ""
-        operacion = NoOPE
-        //dibujar operacion
-        bu1?.setOnClickListener{numPresionado(digito = "1")}
-        bu2?.setOnClickListener{numPresionado(digito = "2")}
-        bu3?.setOnClickListener{numPresionado(digito = "3")}
-        bu4?.setOnClickListener{numPresionado(digito = "4")}
-        bu5?.setOnClickListener{numPresionado(digito = "5")}
-        bu6?.setOnClickListener{numPresionado(digito = "6")}
-        bu7?.setOnClickListener{numPresionado(digito = "7")}
-        bu8?.setOnClickListener{numPresionado(digito = "8")}
-        bu9?.setOnClickListener{numPresionado(digito = "9")}
-        bu0?.setOnClickListener{numPresionado(digito = "0")}
-        pun?.setOnClickListener{numPresionado(digito = ".")}
-        suma?.setOnClickListener{numPresionado(digito = "+")}
-        resta?.setOnClickListener{numPresionado(digito = "-")}
-        multi?.setOnClickListener{numPresionado(digito = "*")}
-        division?.setOnClickListener{numPresionado(digito = "/")}
+        CalVi2?.text = ""
+        oper=0
 
-        suma?.setOnClickListener{operacionPresionada(SUMA)}
-        resta?.setOnClickListener{operacionPresionada(RESTA)}
-        multi?.setOnClickListener{operacionPresionada(MULTIPLICACIÓN)}
-        division?.setOnClickListener{operacionPresionada(DIVISION)}
+        bu1?.setOnClickListener{numPresionado(digito = 1.0)}
+        bu2?.setOnClickListener{numPresionado(digito = 2.0)}
+        bu3?.setOnClickListener{numPresionado(digito = 3.0)}
+        bu4?.setOnClickListener{numPresionado(digito = 4.0)}
+        bu5?.setOnClickListener{numPresionado(digito = 5.0)}
+        bu6?.setOnClickListener{numPresionado(digito = 6.0)}
+        bu7?.setOnClickListener{numPresionado(digito = 7.0)}
+        bu8?.setOnClickListener{numPresionado(digito = 8.0)}
+        bu9?.setOnClickListener{numPresionado(digito = 9.0)}
+        bu0?.setOnClickListener{numPresionado(digito = 0.0)}
+
+        pun?.setOnClickListener{dotPres(dot = ".")}
+
+
+        suma?.setOnClickListener{operacionPresionada(operacion = 1,signo = "+")}
+        resta?.setOnClickListener{operacionPresionada(operacion = 2,signo = "-")}
+        multi?.setOnClickListener{operacionPresionada(operacion = 3,signo = "*")}
+        division?.setOnClickListener{operacionPresionada(operacion = 4,signo = "/")}
 
         borrar?.setOnClickListener{Borrar()}
         igual?.setOnClickListener{IgualPresionado()}
 
     }
-    private fun numPresionado(digito:String){
-        CalVi?.text="${CalVi?.text}${digito}"
+    private fun numPresionado(digito:Double){
+            num=digito
+            CalVi?.append("$num")
 
-        if(CalVi?.text == "0" && digito != ".") {
-            CalVi?.text = "$digito"
-        } else {
-            CalVi?.text = "${digito?.text}$digito"
-        }
-
-        if(operacion==NoOPE)
-        {
-            num1=CalVi?.text.toString().toDouble()
-        }else{
-            num2=CalVi?.text.toString().toDouble()
         }
     }
-    private fun operacionPresionada(operacion: Int){
-        this.operacion=operacion
+    private fun operacionPresionada(operacion: Int,signo:String){
+        oper=operacion
+        //CalVi?.text="${CalVi?.text}"+"${signo}"
+        num1=num
+        CalVi?.append("$signo")
+        num=0
 
-        CalVi?.text="0"
     }
     private fun IgualPresionado(){
-        var resultado =when(operacion){
-            SUMA->num1+num2
-            RESTA->num1-num2
-            MULTIPLICACIÓN->num1*num2
-            DIVISION->num1/num2
-            else->0
+        num2= num
+        when(oper) {
+
+            1->resultado=num1+num2
+            2->resultado=num1-num2
+            3->resultado=num1*num2
+            4->resultado=num1/num2
         }
-        CalVi?.text== if("$resultado".endsWith(".0")) { "$resultado".replace(".0","") } else { "%.2f".format(resultado) }
-        CalVi?.text== if("$resultado".endsWith("/0")) { "$resultado".replace(".0","ERROR") } else { "%.2f".format(resultado) }
+        CalVi?.append(" = $resultado")
+        CalVi2?.append(CalVi?.text)
+        CalVi2?.append("\n")
+        CalVi?.append("")
+
+    }
+    private fun dotPres(dot:String) {
+        CalVi?.append("$dot")
+        CalVi?.toString()?.toDouble()
     }
     private fun Borrar(){
         num1=0.0
         num2=0.0
-        Calvi?.text=""
+        CalVi?.text=""
+        CalVi2?.text=""
         operacion= NoOPE
     }
-    companion object{
-        const val SUMA=1
-        const val  RESTA=2
-        const val MULTIPLICACIÓN=3
-        const val DIVISION=4
-        const val NoOPE=0
-    }
+
     override fun onStart() {
         Log.d(TAG,"onStart")
         super.onStart()
@@ -139,12 +137,10 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG,"onStop")
         super.onStop()
     }
-
     override fun onRestart() {
         Log.d(TAG,"onRestart")
         super.onRestart()
     }
-
     override fun onDestroy() {
         Log.d(TAG,"onDestroy")
         super.onDestroy()
