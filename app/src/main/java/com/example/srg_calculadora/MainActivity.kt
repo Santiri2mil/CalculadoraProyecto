@@ -3,59 +3,88 @@ package com.example.srg_calculadora
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
     private var num1:Double=0.0
     private var num2:Double=0.0
     private var operacion:Int=0
+    private var CalVi: TextView?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val bu1:Button=findViewById<Button>(R.id.b1)
+        val bu2:Button=findViewById<Button>(R.id.b2)
+        val bu3:Button=findViewById<Button>(R.id.b3)
+        val bu4:Button=findViewById<Button>(R.id.b4)
+        val bu5:Button=findViewById<Button>(R.id.b5)
+        val bu6:Button=findViewById<Button>(R.id.b6)
+        val bu7:Button=findViewById<Button>(R.id.b7)
+        val bu8:Button=findViewById<Button>(R.id.b8)
+        val bu9:Button=findViewById<Button>(R.id.b9)
+        val bu0:Button=findViewById<Button>(R.id.b0)
+        val pun:Button=findViewById<Button>(R.id.punto)
 
-        resultadoText.text = "0"
+        val suma:Button=findViewById<Button>(R.id.suma)
+        val multi:Button=findViewById<Button>(R.id.multi)
+        val division:Button=findViewById<Button>(R.id.divsion)
+        val resta:Button=findViewById<Button>(R.id.resta)
+
+        val borrar:Button=findViewById<Button>(R.id.borrar)
+        val igual:Button=findViewById<Button>(R.id.igual)
+
+        val CalVi:TextView=findViewById<TextView>(R.id.CalVi)
+
+
+        CalVi?.text = ""
         operacion = NoOPE
 
-        b1.setOnClickListener{numPresionado(digito = "1")}
-        b2.setOnClickListener{numPresionado(digito = "2")}
-        b3.setOnClickListener{numPresionado(digito = "3")}
-        b4.setOnClickListener{numPresionado(digito = "4")}
-        b5.setOnClickListener{numPresionado(digito = "5")}
-        b6.setOnClickListener{numPresionado(digito = "6")}
-        b7.setOnClickListener{numPresionado(digito = "7")}
-        b8.setOnClickListener{numPresionado(digito = "8")}
-        b9.setOnClickListener{numPresionado(digito = "9")}
-        b0.setOnClickListener{numPresionado(digito = "0")}
-        punto.setOnClickListener{numPresionado(digito = ".")}
+        bu1?.setOnClickListener{numPresionado(digito = "1")}
+        bu2?.setOnClickListener{numPresionado(digito = "2")}
+        bu3?.setOnClickListener{numPresionado(digito = "3")}
+        bu4?.setOnClickListener{numPresionado(digito = "4")}
+        bu5?.setOnClickListener{numPresionado(digito = "5")}
+        bu6?.setOnClickListener{numPresionado(digito = "6")}
+        bu7?.setOnClickListener{numPresionado(digito = "7")}
+        bu8?.setOnClickListener{numPresionado(digito = "8")}
+        bu9?.setOnClickListener{numPresionado(digito = "9")}
+        bu0?.setOnClickListener{numPresionado(digito = "0")}
+        pun?.setOnClickListener{numPresionado(digito = ".")}
+        suma?.setOnClickListener{numPresionado(digito = "+")}
+        resta?.setOnClickListener{numPresionado(digito = "-")}
+        multi?.setOnClickListener{numPresionado(digito = "*")}
+        division?.setOnClickListener{numPresionado(digito = "/")}
 
-        suma.setOnClickListener{operacionPresionada(SUMA)}
-        resta.setOnClickListener{operacionPresionada(RESTA)}
-        multi.setOnClickListener{operacionPresionada(MULTIPLICACIÓN)}
-        division.setOnClickListener{operacionPresionada(DIVISION)}
+        suma?.setOnClickListener{operacionPresionada(SUMA)}
+        resta?.setOnClickListener{operacionPresionada(RESTA)}
+        multi?.setOnClickListener{operacionPresionada(MULTIPLICACIÓN)}
+        division?.setOnClickListener{operacionPresionada(DIVISION)}
 
-        borrar.setOnClickListener{Borrar()}
-        igual.serOnClickListener{IgualPresionado()}
+        borrar?.setOnClickListener{Borrar()}
+        igual?.setOnClickListener{IgualPresionado()}
 
     }
     private fun numPresionado(digito:String){
-        CalVi.text="${CalVi.text}${digito}"
+        CalVi?.text="${CalVi?.text}${digito}"
 
-        if(CalVi.text == "0" && digito != ".") {
-            CalVi.text = "$digito"
+        if(CalVi?.text == "0" && digito != ".") {
+            CalVi?.text = "$digito"
         } else {
-            CalVi.text = "${digito.text}$digito"
+            CalVi?.text = "${digito?.text}$digito"
         }
 
         if(operacion==NoOPE)
         {
-            num1=CalVi.text.toString().toDouble()
+            num1=CalVi?.text.toString().toDouble()
         }else{
-            num2=CalVi.text.toString().toDouble()
+            num2=CalVi?.text.toString().toDouble()
         }
     }
     private fun operacionPresionada(operacion: Int){
         this.operacion=operacion
 
-        CalVi.text="0"
+        CalVi?.text="0"
     }
     private fun IgualPresionado(){
         var resultado =when(operacion){
@@ -65,12 +94,12 @@ class MainActivity : AppCompatActivity() {
             DIVISION->num1/num2
             else->0
         }
-        CalVi.text== if("$resultado".endsWith(".0")) { "$resultado".replace(".0","") } else { "%.2f".format(resultado) }
+        CalVi?.text== if("$resultado".endsWith(".0")) { "$resultado".replace(".0","") } else { "%.2f".format(resultado) }
     }
     private fun Borrar(){
         num1=0.0
         num2=0.0
-        Calvi.text="0"
+        Calvi?.text=""
         operacion= NoOPE
     }
     companion object{
